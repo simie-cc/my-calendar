@@ -2,6 +2,7 @@ BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//simiecc.gitlab.io//my-calendar iCal
 X-WR-CALNAME:伊帝馬行事曆(2022-2023)
+X-WR-TIMEZONE:Asia/Taipei
 NAME:伊帝馬行事曆(2022-2023)
 CALSCALE:GREGORIAN
 BEGIN:VTIMEZONE
@@ -20,9 +21,9 @@ END:VTIMEZONE
 {{range $index,$elm := .events}}
 BEGIN:VEVENT
 DTSTAMP:{{call $.formatUTC $elm.EventTime }}
-UID:1659946426404-{{$index}}@simiecc.gitlab.io
-DTSTART;TZID=Asia/Taipei;VALUE=DATE:{{call $.format $elm.EventTime }}
-DTEND;TZID=Asia/Taipei;VALUE=DATE:{{call $.format $elm.EventTimeEnd }}
+UID:{{$.today}}-{{$index}}@simiecc.gitlab.io
+DTSTART;VALUE=DATE:{{call $.format $elm.EventTime }}
+DTEND;VALUE=DATE:{{call $.format $elm.EventTimeEnd }}
 SUMMARY:{{ $elm.EventDesc }}
 END:VEVENT
 {{end}}
