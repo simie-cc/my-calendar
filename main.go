@@ -21,7 +21,7 @@ func main() {
 	t := template.New("Template_1")
 	t.Parse(icsTemplate)
 
-	output, err := os.Create("cal.ics")
+	output, err := os.Create("./docs/cal.ics")
 	if err != nil {
 		fmt.Println("Cannot create output file: ", err)
 		os.Exit(1)
@@ -46,7 +46,7 @@ func main() {
 }
 
 func readAndParse() []Event {
-	cal, err := os.Open("./docs/calendar.txt")
+	cal, err := os.Open("calendar.txt")
 	if err != nil {
 		fmt.Println("Open error: ", err)
 		os.Exit(1)
