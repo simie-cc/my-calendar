@@ -11,8 +11,9 @@ import (
 )
 
 type Event struct {
-	EventTime time.Time
-	EventDesc string
+	EventTime    time.Time
+	EventTimeEnd time.Time
+	EventDesc    string
 }
 
 func main() {
@@ -91,8 +92,9 @@ func readAndParse() []Event {
 
 		fmt.Println("Line: ", line, "===", eventTime.Format("2006/01/02"), eventDesc)
 		events = append(events, Event{
-			EventTime: eventTime,
-			EventDesc: eventDesc,
+			EventTime:    eventTime,
+			EventTimeEnd: eventTime.AddDate(0, 0, 1),
+			EventDesc:    eventDesc,
 		})
 	}
 

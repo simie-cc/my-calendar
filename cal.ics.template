@@ -22,6 +22,7 @@ BEGIN:VEVENT
 DTSTAMP:{{call $.formatUTC $elm.EventTime }}
 UID:1659946426404-{{$index}}@simiecc.gitlab.io
 DTSTART;TZID=Asia/Taipei;VALUE=DATE:{{call $.format $elm.EventTime }}
+DTEND;TZID=Asia/Taipei;VALUE=DATE:{{call $.format $elm.EventTimeEnd }}
 SUMMARY:{{ $elm.EventDesc }}
 END:VEVENT
 {{end}}
