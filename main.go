@@ -35,7 +35,7 @@ func main() {
 			return d.In(time.UTC).Format("20060102T150405")
 		},
 		"format": func(d time.Time) string {
-			return d.Format("20060102T150405")
+			return d.Format("20060102")
 		},
 	})
 	if err != nil {
