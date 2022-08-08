@@ -20,12 +20,14 @@ END:VTIMEZONE
 
 {{range $index,$elm := .events}}
 BEGIN:VEVENT
-DTSTAMP:{{call $.formatUTC $elm.EventTime }}
-UID:{{$.today}}-{{$index}}@simiecc.gitlab.io
 DTSTART;VALUE=DATE:{{call $.format $elm.EventTime }}
 DTEND;VALUE=DATE:{{call $.format $elm.EventTimeEnd }}
-SUMMARY:{{ $elm.EventDesc }}
+DTSTAMP:20220808T084825Z
+UID:{{$.today}}-{{$index}}@simiecc.gitlab.io
+CREATED:20220808T084825Z
 LAST-MODIFIED:{{ $.today }}
+SUMMARY:{{ $elm.EventDesc }}
+DESCRIPTION:
 END:VEVENT
 {{end}}
 
