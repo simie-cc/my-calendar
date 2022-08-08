@@ -1,0 +1,29 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//simiecc.gitlab.io//my-calendar iCal
+X-WR-CALNAME:my-calendar
+NAME:my-calendar
+CALSCALE:GREGORIAN
+BEGIN:VTIMEZONE
+TZID:Asia/Taipei
+LAST-MODIFIED:{{ .today }}
+TZURL:http://tzurl.org/zoneinfo-outlook/Asia/Taipei
+X-LIC-LOCATION:Asia/Taipei
+BEGIN:STANDARD
+TZNAME:CST
+TZOFFSETFROM:+0800
+TZOFFSETTO:+0800
+DTSTART:19700101T000000
+END:STANDARD
+END:VTIMEZONE
+
+{{range $index,$elm := .events}}
+BEGIN:VEVENT
+DTSTAMP:{{call $.formatUTC $elm.EventTime }}
+UID:1659946426404-{{$index}}@simiecc.gitlab.io
+DTSTART;TZID=Asia/Taipei:{{call $.format $elm.EventTime }}
+SUMMARY:{{ $elm.EventDesc }}
+END:VEVENT
+{{end}}
+
+END:VCALENDAR
