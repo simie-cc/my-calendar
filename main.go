@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"html/template"
+	"io"
 	"os"
 	"regexp"
 	"strconv"
@@ -19,8 +20,8 @@ type Event struct {
 func main() {
 	fmt.Println("test")
 	events := readAndParse()
-	t := template.New("Template_1")
-	t.Parse(icsTemplate)
+	temp := template.New("Template_1")
+	temp.Parse(icsTemplate)
 
 	output, err := os.Create("./docs/cal.ics")
 	if err != nil {
@@ -29,8 +30,9 @@ func main() {
 	}
 	defer output.Close()
 
-	err = t.Execute(output, map[string]interface{}{
-		"today":  time.Now().In(time.UTC).Format("20060102T150405Z"),
+	now := time.Now()
+	data := map[string]interface{}{
+		"now":    now.In(time.UTC).Format("20060102T150405Z"),
 		"events": events,
 		"formatUTC": func(d time.Time) string {
 			return d.In(time.UTC).Format("20060102T150405")
@@ -38,12 +40,22 @@ func main() {
 		"format": func(d time.Time) string {
 			return d.Format("20060102")
 		},
-	})
+	}
+	err = generateIcs(temp, now, output, data)
 	if err != nil {
 		fmt.Println("error template: ", err)
 		os.Exit(1)
 	}
+}
 
+// func shaString(raw string) string {
+// 	s := sha512.New()
+// 	s.Write([]byte(raw))
+// 	return base64.URLEncoding.EncodeToString(s.Sum(nil))
+// }
+
+func generateIcs(temp *template.Template, now time.Time, output io.Writer, data interface{}) error {
+	return temp.Execute(output, data)
 }
 
 func readAndParse() []Event {
