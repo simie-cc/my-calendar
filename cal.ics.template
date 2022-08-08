@@ -25,6 +25,7 @@ UID:{{$.today}}-{{$index}}@simiecc.gitlab.io
 DTSTART;VALUE=DATE:{{call $.format $elm.EventTime }}
 DTEND;VALUE=DATE:{{call $.format $elm.EventTimeEnd }}
 SUMMARY:{{ $elm.EventDesc }}
+LAST-MODIFIED:{{ $.today }}
 END:VEVENT
 {{end}}
 
