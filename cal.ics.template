@@ -1,8 +1,8 @@
 BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//simiecc.gitlab.io//my-calendar iCal
-X-WR-CALNAME:my-calendar
-NAME:my-calendar
+X-WR-CALNAME:伊帝馬行事曆(2022-2023)
+NAME:伊帝馬行事曆(2022-2023)
 CALSCALE:GREGORIAN
 BEGIN:VTIMEZONE
 TZID:Asia/Taipei
