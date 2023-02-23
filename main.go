@@ -67,53 +67,74 @@ func readAndParse() []Event {
 	}
 	defer cal.Close()
 
-	lineRegex := regexp.MustCompile("^([[:digit:]]{4})/([[:digit:]]{1,2})/([[:digit:]]{1,2}) (.*)$")
-	now := time.Now()
-	local := now.Location()
+	lineRegex := regexp.MustCompile("^([[:digit:]]{4})/([[:digit:]]{1,2})/([[:digit:]]{1,2})(-([[:digit:]]{4})/([[:digit:]]{1,2})/([[:digit:]]{1,2}))? (.*)$")
 
 	var events []Event
 	scn := bufio.NewScanner(cal)
 	for scn.Scan() {
 		line := scn.Text()
 
+		if len(line) == 0 {
+			continue
+		}
+
 		if strings.HasPrefix(line, "#") {
 			continue
 		}
 
 		sub := lineRegex.FindStringSubmatch(line)
-		year, err := strconv.Atoi(sub[1])
+		eventTime, err := parseEventDate(line, sub, 1)
 		if err != nil {
-			fmt.Printf("Date(year) error for line [%s]: %v\n", line, err)
 			continue
 		}
 
-		month, err := strconv.Atoi(sub[2])
-		if err != nil {
-			fmt.Printf("Date(month) error for line [%s]: %v\n", line, err)
-			continue
+		var eventTimeEnd time.Time
+		if len(sub[4]) > 0 {
+			eventTimeEnd, err = parseEventDate(line, sub, 5)
+			if err != nil {
+				continue
+			}
+		} else {
+			eventTimeEnd = eventTime.AddDate(0, 0, 1)
 		}
+		eventDesc := sub[8]
 
-		dayOfMonth, err := strconv.Atoi(sub[3])
-		if err != nil {
-			fmt.Printf("Date(day) error for line [%s]: %v\n", line, err)
-			continue
-		}
-
-		eventTime := time.Date(year, time.Month(month), dayOfMonth, 0, 0, 0, 0, local)
-		if err != nil {
-			fmt.Printf("Date error for line [%s]: %v\n", line, err)
-			continue
-		}
-
-		eventDesc := sub[4]
-
-		fmt.Println("Line: ", line, "===", eventTime.Format("2006/01/02"), eventDesc)
+		fmt.Println("Line: ", line, "===",
+			eventTime.Format("2006/01/02"), eventTimeEnd.Format("2006/01/02"), eventDesc)
 		events = append(events, Event{
 			EventTime:    eventTime,
-			EventTimeEnd: eventTime.AddDate(0, 0, 1),
+			EventTimeEnd: eventTimeEnd,
 			EventDesc:    eventDesc,
 		})
 	}
 
 	return events
+}
+
+func parseEventDate(line string, sub []string, start int) (time.Time, error) {
+	year, err := strconv.Atoi(sub[start+0])
+	if err != nil {
+		fmt.Printf("Date(year) error for line [%s]: %v\n", line, err)
+		return time.Time{}, err
+	}
+
+	month, err := strconv.Atoi(sub[start+1])
+	if err != nil {
+		fmt.Printf("Date(month) error for line [%s]: %v\n", line, err)
+		return time.Time{}, err
+	}
+
+	dayOfMonth, err := strconv.Atoi(sub[start+2])
+	if err != nil {
+		fmt.Printf("Date(day) error for line [%s]: %v\n", line, err)
+		return time.Time{}, err
+	}
+
+	eventTime := time.Date(year, time.Month(month), dayOfMonth, 0, 0, 0, 0, time.Local)
+	if err != nil {
+		fmt.Printf("Date error for line [%s]: %v\n", line, err)
+		return time.Time{}, err
+	}
+
+	return eventTime, nil
 }
