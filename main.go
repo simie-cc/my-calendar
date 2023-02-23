@@ -8,6 +8,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -18,7 +19,7 @@ type Event struct {
 }
 
 func main() {
-	fmt.Println("test")
+
 	events := readAndParse()
 	temp := template.New("Template_1")
 	temp.Parse(icsTemplate)
@@ -74,6 +75,10 @@ func readAndParse() []Event {
 	scn := bufio.NewScanner(cal)
 	for scn.Scan() {
 		line := scn.Text()
+
+		if strings.HasPrefix(line, "#") {
+			continue
+		}
 
 		sub := lineRegex.FindStringSubmatch(line)
 		year, err := strconv.Atoi(sub[1])
