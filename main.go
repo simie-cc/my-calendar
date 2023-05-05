@@ -94,6 +94,7 @@ func readAndParse() []Event {
 			if err != nil {
 				continue
 			}
+			eventTimeEnd = eventTimeEnd.AddDate(0, 0, 1)
 		} else {
 			eventTimeEnd = eventTime.AddDate(0, 0, 1)
 		}

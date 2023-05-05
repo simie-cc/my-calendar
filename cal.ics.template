@@ -23,7 +23,7 @@ BEGIN:VEVENT
 DTSTART;VALUE=DATE:{{call $.format $elm.EventTime }}
 DTEND;VALUE=DATE:{{call $.format $elm.EventTimeEnd }}
 DTSTAMP:20220808T084825Z
-UID:{{$.now}}-{{$index}}@simiecc.gitlab.io
+UID:{{call $.format $elm.EventTime }}-{{$index}}@simiecc.gitlab.io
 CREATED:20220808T084825Z
 LAST-MODIFIED:{{ $.now }}
 SUMMARY:{{ $elm.EventDesc }}
